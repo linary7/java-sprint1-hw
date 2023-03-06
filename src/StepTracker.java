@@ -16,47 +16,44 @@ public class StepTracker {
     }
 
     void addNewStepsNumberPerDay() {
-        int monthIndex = requestMonth();
-        if (monthIndex == 0) {
-            System.out.println("Такого месяца нет");
+        int monthIndex = getMonthIndex();
+        if (isInvalidMonth(monthIndex)) {
+            System.out.println("Номер месяца введён неверно");
             return;
         }
 
         System.out.println("Введите номер дня (от 1 до 30 включительно):");
-        int dayIndex = scanner.nextInt();
-        if (dayIndex < 1) {
-            System.out.println("Такого дня нет");
-            return;
-        } else if (dayIndex > 30) {
-            System.out.println("Такого дня нет");
+        int dayIndex = Main.scanUserInputSafely(scanner);
+        if (dayIndex < 1 || dayIndex > 30) {
+            System.out.println("Номер дня введён неверно");
             return;
         }
 
         System.out.println("Введите количество шагов:");
-        int stepAmount = scanner.nextInt();
+        int stepAmount = Main.scanUserInputSafely(scanner);
         if (stepAmount < 0) {
-            System.out.println("Количество шагов не может быть отрицательным");
+            System.out.println("Количество шагов введено неверно");
             return;
         }
+
         MonthData monthData = monthToData[monthIndex - 1];
         monthData.days[dayIndex - 1] = stepAmount;
     }
 
     void changeStepGoal() {
         System.out.println("Введите новую цель по количеству шагов в день:");
-        int stepGoal = scanner.nextInt();
+        int stepGoal = Main.scanUserInputSafely(scanner);
         if (stepGoal < 1) {
             System.out.println("Цель по количеству шагов должна быть больше нуля!");
             return;
         }
         goalByStepsPerDay = stepGoal;
-        System.out.println(goalByStepsPerDay);
     }
 
     void printStatistic() {
-        int monthIndex = requestMonth();
-        if (monthIndex == 0) {
-            System.out.println("Такого месяца нет");
+        int monthIndex = getMonthIndex();
+        if (isInvalidMonth(monthIndex)) {
+            System.out.println("Номер месяца введён неверно");
             return;
         }
 
@@ -72,15 +69,11 @@ public class StepTracker {
         System.out.println();
     }
 
-    int requestMonth () {
-        System.out.println("Введите номер месяца:");
-        int monthIndex = scanner.nextInt();
-        if (monthIndex < 1) {
-            return 0;
-        } else if (monthIndex > 12) {
-            return 0;
-        } else {
-            return monthIndex;
-        }
+    private int getMonthIndex() {
+        System.out.println("Введите номер месяца от 1 до 12 включительно");
+        return Main.scanUserInputSafely(scanner);
+    }
+    private boolean isInvalidMonth(int monthIndex) {
+        return monthIndex < 1 || monthIndex > 12;
     }
 }

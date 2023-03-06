@@ -6,13 +6,7 @@ public class Main {
         StepTracker stepTracker = new StepTracker(scanner);
         while (true) {
             printMenu();
-            int i;
-            try {
-                i = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Введите целое число");
-                return;
-            }
+            int i = scanUserInputSafely(scanner);
             if (i == 1) {
                 stepTracker.addNewStepsNumberPerDay();
             } else if (i == 2) {
@@ -34,5 +28,15 @@ public class Main {
         System.out.println("3 - Получить статистику за какой-то месяц");
         System.out.println("0 - Выйти");
         System.out.println("Введите номер команды:");
+    }
+
+    public static int scanUserInputSafely(Scanner scanner) {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException ime) {
+            System.out.println("Недопустимые данные");
+            scanner.nextLine();
+            return -1;
+        }
     }
 }
